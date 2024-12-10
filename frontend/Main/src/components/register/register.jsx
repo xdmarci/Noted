@@ -63,14 +63,15 @@ const RegisterScreen = () => {
                     })
                 })
                 .then(response => response.json())
-                .then(response => alert(response.message))
                 .then(data => {
-                    if (data.success) {
-                        alert("Sikeres regisztráció!");
-                    } else {
-                        console.log(data.message);
-                        alert("Hiba a regisztráció során!");
-                    }
+                  if (data.error) {
+                    alert(data.error)
+                    console.log(data.error)
+                  } else {
+                    alert(data.succes)
+                    console.log(data.succes)
+                    setCurrentScreen("login");
+                  }
                 })
                 .catch(error => console.log(error));
 
