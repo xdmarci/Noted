@@ -10,6 +10,17 @@ export class User{
     JogosultsagId
     Token
 
+    async loadDataFromDB(UserId){
+        try {
+            const conn = await mysqlP.createConnection(dbConfig)
+            const[rows]=  await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[UserId])
+            Object.assign(this,rows[0])
+            console.log(this)
+        }
+        catch {
+            return false
+        }
+    }
 
     static async validUser (Email,Jelszo) {
         let conn;
