@@ -8,17 +8,19 @@ export default function verifyToken(req,res,next){
             res.status(401).send({error:"Token szükséges a végpont használatához!"})
             return
         }
-        const {JWT_STRING} = process.env
+
+    const {JWT_STRING} = process.env
     if (!JWT_STRING)
     {
         res.status(401).send({error:"Hiba történt a token ellenörzése során!"})
         return  
     }
     try {
-        const decodedToken = jwt.verify(token,JWT_STRING)
+        const decodedToken = jwt.verify(token, JWT_STRING);
         res.decodedToken = decodedToken
         next()
-    } catch {
+    } 
+    catch (error) {
         res.status(401).send({error:"Hibás token"})
         return
     }
