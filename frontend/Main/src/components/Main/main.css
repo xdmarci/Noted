@@ -1,0 +1,77 @@
+/* General Reset */
+body, html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Full Screen Background */
+body {
+  background-color: #d3d3d3; /* Light gray background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Container Styling */
+.container {
+  display: flex;
+  gap: 20px; /* Space between card and button section */
+  align-items: center;
+}
+
+/* Card Styling */
+.card {
+  background-color: #fff; /* White background */
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 350px;
+}
+
+/* Logo Section */
+.logo-section {
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 300px; /* Adjust size for logo */
+  margin-bottom: 5px;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #0056b3; /* Blue color for the title */
+  margin: 0;
+}
+
+p {
+  font-size: 1rem;
+  color: #333; /* Dark gray text */
+  margin: 10px 0 0;
+}
+
+/* Button Section */
+.button-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Spacing between buttons */
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #0056b3; /* Blue background */
+  color: #fff; /* White text */
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #003d80; /* Darker blue on hover */
+}
