@@ -26,6 +26,10 @@ export async function Register(req,res) {
             res.status(404).send({error:"A jelszónak tartalmaznia kell nagy betűt!"})
             return
         }
+        if(!(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(user.Email)){
+            res.status(404).send({error:"Nem megfelelő a email formátuma."})
+            return
+        }
         const [rows] = await conn.execute('insert into Felhasznalok values(null,?,?,?,?,?)',[user.FelhasznaloNev,user.Jelszo,user.Email,user.Statusz,user.JogosultsagId])
         if (rows.affectedRows > 0) {
             res.status(201).send({succes:"Sikeres regisztráció",data:user})
@@ -51,6 +55,5 @@ export async function getUserFromToken(req, res) {
     }
     const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = 8',[res.decodedToken.UserId])
     let user = rows[0]
-    console.log(user)
     res.send(user)
 }

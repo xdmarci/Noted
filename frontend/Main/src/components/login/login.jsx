@@ -14,10 +14,6 @@ const LoginScreen = () => {
     if (currentScreen === "home") return <Main />;
 
     const navigate = useNavigate(); // Hook for navigation
-
-
-
-    
     return (
       <div className="login-container">
         <div className="logo-section">

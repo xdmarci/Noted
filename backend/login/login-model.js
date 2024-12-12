@@ -16,7 +16,7 @@ export default async function logIn(req,res){
             res.status(401).send({error:"Hibás email és jelszó!"})
             return
         }
-        if (!await user.loadDataFromDB(UserId))
+        if (user.loadDataFromDB(UserId) === undefined)
         {
             res.status(401).send({error:"A bejelentkezés nem sikerült"})
             return 
