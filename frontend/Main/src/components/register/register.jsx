@@ -44,7 +44,7 @@ const RegisterScreen = () => {
             className="input-field"
           />
           
-          <button type="submit" class="btn" onClick={
+          <button type="submit" className="btn" onClick={
             (event) => {
               
                 event.preventDefault();
@@ -74,12 +74,6 @@ const RegisterScreen = () => {
                   }
                 })
                 .catch(error => console.log(error));
-
-                setCurrentScreen("login");
-                
-                
-                
-              
           }}>
             Regisztráció
           </button>

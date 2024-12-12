@@ -14,8 +14,16 @@ export async function Register(req,res) {
     try {
     
         const conn = await mysqlP.createConnection(dbConfig)
-        if(user.Jelszo.length < 5){
-            res.status(404).send({error:"túl rövid a jelszó!"})
+        if(user.Jelszo.length < 8){
+            res.status(404).send({error:"túl rövid a jelszó minimum hossz: 8!"})
+            return
+        }
+        if(!(/\d/.test(user.Jelszo))){
+            res.status(404).send({error:"A jelszónak tartalmaznia kell számokat!"})
+            return
+        }
+        if(!(/[A-Z]/.test(user.Jelszo))){
+            res.status(404).send({error:"A jelszónak tartalmaznia kell nagy betűt!"})
             return
         }
         const [rows] = await conn.execute('insert into Felhasznalok values(null,?,?,?,?,?)',[user.FelhasznaloNev,user.Jelszo,user.Email,user.Statusz,user.JogosultsagId])
@@ -27,9 +35,7 @@ export async function Register(req,res) {
     }
     catch (err){
         switch (err.errno) {
-            case 1062 :
-                        res.status(500).send({error:"Már létező felhasználó "});
-                        break;
+            case 1062 : res.status(500).send({error:"Már létező felhasználó "});break;
             case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
             default:  res.status(500).send({error:"Hiba a regisztrációkor"}); break;
         }
