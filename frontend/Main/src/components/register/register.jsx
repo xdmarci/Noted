@@ -14,12 +14,12 @@ const RegisterScreen = () => {
   const renderContent = () => { 
 
     if (currentScreen === "login") return <LoginScreen />;
-    if (currentScreen === "home") return <Main />;
+    if (currentScreen === "main") return <Main />;
 
     return (
       <div className="register-container">
       <div className="logo-section">
-        <a onClick={() => setCurrentScreen("home")}><img src={logoImg} alt="Noted Logo" className="logo"  /></a>
+        <a onClick={() => setCurrentScreen("main")}><img src={logoImg} alt="Noted Logo" className="logo"  /></a>
         <h1>Noted.</h1>
         <p>Jegyzeteid egyszerűen és rendszerezetten</p>
       </div>

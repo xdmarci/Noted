@@ -18,6 +18,10 @@ export async function Register(req,res) {
             res.status(404).send({error:"túl rövid a jelszó minimum hossz: 8!"})
             return
         }
+        if(user.FelhasznaloNev.length < 5){
+            res.status(404).send({error:"túl rövid a felhasználó név minimum hossz: 5!"})
+            return
+        }
         if(!(/\d/.test(user.Jelszo))){
             res.status(404).send({error:"A jelszónak tartalmaznia kell számokat!"})
             return
