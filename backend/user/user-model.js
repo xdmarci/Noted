@@ -1,6 +1,4 @@
 import mysqlP from 'mysql2/promise'
-import mysql from 'mysql2'
-import  {User} from './user.js'
 import dbConfig from '../app/config.js'
 
 
@@ -57,7 +55,7 @@ export async function getUserFromToken(req, res) {
         res.status(401).send({error:"Hiányzó paraméter"})
         return
     }
-    const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = 8',[res.decodedToken.UserId])
+    const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
     let user = rows[0]
     res.send(user)
 }

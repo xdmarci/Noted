@@ -27,7 +27,14 @@ CREATE TABLE Jegyzetek (
     FOREIGN KEY (UtolsoFrissito) REFERENCES Felhasznalok(FelhasznaloId)
 );
 
--- 3. Megosztás tábla (Shares table for Notes)
+-- 3. Csoportok tábla (Groups table)
+CREATE TABLE Csoportok (
+    CsoportId INT AUTO_INCREMENT PRIMARY KEY,
+    Tulajdonos VARCHAR(255) NOT NULL,
+    CsoportNev VARCHAR(255) NOT NULL 
+);
+
+-- 4. Megosztás tábla (Shares table for Notes)
 CREATE TABLE Megosztas (
     JegyzetId INT,
     MegosztottFelhId INT,                        
@@ -36,13 +43,6 @@ CREATE TABLE Megosztas (
     FOREIGN KEY (JegyzetId) REFERENCES Jegyzetek(JegyzetId),   
     FOREIGN KEY (MegosztottFelhId) REFERENCES Felhasznalok(FelhasznaloId), 
     FOREIGN KEY (GroupSharedId) REFERENCES Csoportok(CsoportId)  
-);
-
--- 4. Csoportok tábla (Groups table)
-CREATE TABLE Csoportok (
-    CsoportId INT AUTO_INCREMENT PRIMARY KEY,
-    Tulajdonos VARCHAR(255) NOT NULL,
-    CsoportNev VARCHAR(255) NOT NULL 
 );
 
 -- 5. Csoport tagok tábla (Group Members table)
