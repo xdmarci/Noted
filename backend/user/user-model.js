@@ -46,7 +46,7 @@ export async function Register(req,res) {
             res.status(201).send({succes:"Sikeres regisztráció",data:user})
             return  
         }
-        res.status(404).send({error:"Nem lett rögzítve az adat!"})
+        res.status(404).send({error:"Hiba a regisztrációkor!"})
     }
     catch (err){
         switch (err.errno) {
@@ -67,4 +67,39 @@ export async function getUserFromToken(req, res) {
     const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
     let user = rows[0]
     res.send(user)
+}
+
+export async function updateUserWithToken(req, res) {
+    const conn = await mysqlP.createConnection(dbConfig)
+    if (!res.decodedToken.UserId) {
+        res.status(401).send({error:"Hiányzó paraméter"})
+        return
+    }
+
+    const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+    let olduser = rows[0]
+    let user = olduser
+    if(!olduser) {
+        res.status(500).send({error:'A felhasználó nem létezik'})
+        return
+    } 
+    Object.assign(user,req.body)
+    try {
+        const conn = await mysqlP.createConnection(dbConfig)
+        const [rows] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,res.decodedToken.UserId])
+        user.Jelszo=undefined
+        if (rows.affectedRows > 0) {
+            res.status(201).send({succes:"Sikeres frissítés",data:user})
+            return  
+        }
+        res.status(404).send({error:"Sikertelen az adatok frissítése!"})
+    }
+    catch (err){
+        switch (err.errno) {
+            case 1062 : res.status(500).send({error:"Már létező felhasználó "});break;
+            case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
+            default:  res.status(500).send({error:"Hiba a frissítéskor: " + err}); break;
+        }
+        return
+    }
 }

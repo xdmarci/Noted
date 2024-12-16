@@ -10,14 +10,14 @@ export class User{
     JogosultsagId
     Token
 
-    async loadDataFromDB(UserId){
+    static async loadDataFromDB(UserId){
         try {
             const conn = await mysqlP.createConnection(dbConfig)
-            const[rows]=  await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[UserId])
-            Object.assign(this,rows[0])
+            const[rows]= await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[UserId])
+            return rows[0]
         }
         catch {
-            return false
+            return undefined
         }
     }
 
