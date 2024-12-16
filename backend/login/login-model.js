@@ -16,6 +16,15 @@ export default async function logIn(req,res){
             res.status(401).send({error:"Hibás email és jelszó!"})
             return
         }
+        const invalidCharaters = ['`',';',',','(',')',"'",'"','=','$'];
+        for(let i = 0; i < invalidCharaters.length; i++)
+        {
+            if(user.Jelszo.includes(invalidCharaters[i]) || user.Email.includes(invalidCharaters[i]))
+            {
+                res.status(404).send({error:"Nem megengedett karakterek használata."})
+                return
+            }
+        }
         if (user.loadDataFromDB(UserId) === undefined)
         {
             res.status(401).send({error:"A bejelentkezés nem sikerült"})
