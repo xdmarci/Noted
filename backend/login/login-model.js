@@ -34,6 +34,10 @@ export default async function logIn(req,res){
             res.status(401).send({error:"A bejelentkezés nem sikerült"})
             return 
         }
+        if(user.statusz == 0){
+            res.status(401).send({error:"Fiókja blokkolva van"})
+            return 
+        }
         user.Jelszo == undefined
         const payload = {UserId:user.FelhasznaloId}
         const {JWT_STRING} = process.env

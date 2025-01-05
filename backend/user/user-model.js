@@ -66,6 +66,10 @@ export async function getUserFromToken(req, res) {
     }
     const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
     let user = rows[0]
+    if(user.statusz == 0){
+        res.status(401).send({error:"Fiókja blokkolva van"})
+        return 
+    }
     res.send(user)
 }
 
@@ -135,7 +139,7 @@ export async function updateUserByIdAdmin(req, res) {
     Object.assign(user,req.body)
     try {
         const conn = await mysqlP.createConnection(dbConfig)
-        const [rows] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,req.params.UserId])
+        const [rows] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=?, Statusz=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,user.statusz,req.params.UserId])
         user.Jelszo=undefined
         if (rows.affectedRows > 0) {
             res.status(201).send({succes:"Sikeres frissítés",data:user})
