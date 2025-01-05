@@ -103,3 +103,52 @@ export async function updateUserWithToken(req, res) {
         return
     }
 }
+
+export async function updateUserByIdAdmin(req, res) {
+    if (!req.params.UserId)
+    {
+        res.status(401).send({error: "Hiányzó felhasználó azonosító"})
+        return
+    }
+    const conn = await mysqlP.createConnection(dbConfig)
+    if (!res.decodedToken.UserId) {
+        res.status(401).send({error:"Hiányzó paraméter"})
+        return
+    }
+
+    const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+    let adminuser = rows2[0]
+
+    if(adminuser.JogosultsagId != 3){
+        res.status(404).send({error:"Nincs joga más adatainak a frissítéséhez!"})
+        return
+    }    
+
+    const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[req.params.UserId])
+    let olduser = rows[0]
+    let user = olduser
+    if(!olduser) {
+        res.status(500).send({error:'A felhasználó nem létezik'})
+        return
+    } 
+
+    Object.assign(user,req.body)
+    try {
+        const conn = await mysqlP.createConnection(dbConfig)
+        const [rows] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,req.params.UserId])
+        user.Jelszo=undefined
+        if (rows.affectedRows > 0) {
+            res.status(201).send({succes:"Sikeres frissítés",data:user})
+            return  
+        }
+        res.status(404).send({error:"Sikertelen az adatok frissítése!"})
+    }
+    catch (err){
+        switch (err.errno) {
+            case 1062 : res.status(500).send({error:"Már létező felhasználó "});break;
+            case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
+            default:  res.status(500).send({error:"Hiba a frissítéskor: " + err}); break;
+        }
+        return
+    }
+}

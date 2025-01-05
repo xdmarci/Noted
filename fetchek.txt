@@ -1,0 +1,29 @@
+fetch('http://localhost:3000/updateuser', {
+    method:'PUT',headers: new Headers(
+        {"Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEyMiwiaWF0IjoxNzM2MDgxNzU1LCJleHAiOjE3MzYwODg5NTV9.U1JQld_AjIKYZNOcU7To-CJRn3XNlyoJQ2eNjHMxUwM"}
+    ),
+    body:JSON.stringify({"Email":"akarmi@ize.hu"})
+}).then(response => response.json())
+  .then(data => console.log(data))
+
+fetch('http://localhost:3000/getuser', {
+    method:'GET',headers: new Headers(
+        {"Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczNDM0OTA0NSwiZXhwIjoxNzM0MzU2MjQ1fQ.WwZT8xVFkdliqMvLitsRaQbLs2QiLQwWGlsLO7Q85-M"}
+    )
+}).then(response => response.json())
+  .then(data => console.log(data))
+
+
+fetch('http://localhost:3000/Admupdateuser/111', {
+    method:'PUT',headers: new Headers(
+        {"Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEyMiwiaWF0IjoxNzM2MDgxNzU1LCJleHAiOjE3MzYwODg5NTV9.U1JQld_AjIKYZNOcU7To-CJRn3XNlyoJQ2eNjHMxUwM"}
+    ),
+    body:JSON.stringify({"Email":"akarmi@ize.hu"})
+}).then(response => response.json())
+  .then(data => console.log(data))
