@@ -36,7 +36,7 @@ const Home = () => {
     <button className="new-note-btn">+ Új</button>
     <input
       type="text"
-      class="search-bar"
+      className="search-bar"
       placeholder="Keresés"
     />
     <div className="buttons">
