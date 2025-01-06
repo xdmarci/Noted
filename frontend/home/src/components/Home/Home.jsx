@@ -12,14 +12,14 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (isLoggedIn !== 'true') {
+    const token = localStorage.getItem('Token');
+    if (!token) {
       navigate('/');
     }
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('Token');
     navigate('/');
   };
   
