@@ -30,37 +30,37 @@ const Home = () => {
     
 
   return (
-    <body>
-      <div class="main-container">
-  <div class="top-bar">
-    <button class="new-note-btn">+ Új</button>
+
+      <div className="main-container">
+  <div className="top-bar">
+    <button className="new-note-btn">+ Új</button>
     <input
       type="text"
       class="search-bar"
       placeholder="Keresés"
     />
-    <div class="buttons">
+    <div className="buttons">
       <button onClick={handleLogout}>Kijelentkezés</button>
       <button onClick={() => requestAdmin()}>Admin kérés</button>
     </div>
   </div>
-  <div class="content">
-    <div class="notes-section">
+  <div className="content">
+    <div className="notes-section">
       <h2>Jegyzetek.</h2>
-      <p class="empty-msg">
+      <p className="empty-msg">
         Üres, mint egy új kezdet. Jegyzetelj valamit!
       </p>
     </div>
-    <div class="shared-notes-section">
+    <div className="shared-notes-section">
       <h2>Megosztott jegyzetek.</h2>
-      <p class="empty-msg">
+      <p className="empty-msg">
         Úgy tűnik, itt még senki nem osztott meg semmit... Kezdjétek el
         közösen!
       </p>
     </div>
   </div>
 </div>
-    </body>
+
   );
   };
   return renderContent();

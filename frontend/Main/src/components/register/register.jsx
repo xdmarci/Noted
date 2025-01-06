@@ -3,6 +3,7 @@ import logoImg from "../../assets/logo_main.png";
 import LoginScreen from "../login/login";
 import "./register.css";
 import Main from "../Main/Main";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -16,10 +17,12 @@ const RegisterScreen = () => {
     if (currentScreen === "login") return <LoginScreen />;
     if (currentScreen === "main") return <Main />;
 
+    const navigate = useNavigate();
+
     return (
       <div className="register-container">
       <div className="logo-section">
-        <a onClick={() => setCurrentScreen("main")}><img src={logoImg} alt="Noted Logo" className="logo"  /></a>
+        <a onClick={() => navigate("/")}><img src={logoImg} alt="Noted Logo" className="logo"  /></a>
         <h1>Noted.</h1>
         <p>Jegyzeteid egyszerűen és rendszerezetten</p>
       </div>

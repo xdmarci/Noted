@@ -8,7 +8,7 @@ import RegisterScreen from "../register/register";
 const Main = () => {
   const navigate = useNavigate();
 
-  const [currentScreen, setCurrentScreen] = useState("main");
+  const [currentScreen, setCurrentScreen] = useState("/");
 
   const renderContent = () => {
     if (currentScreen === "login") return <LoginScreen />;

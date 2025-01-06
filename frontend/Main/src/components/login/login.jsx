@@ -9,6 +9,7 @@ const LoginScreen = () => {
 
   const navigate = useNavigate();
 
+  const [currentScreen, setCurrentScreen] = useState("/login");
 
   const renderContent = (e) => {
 
@@ -18,7 +19,7 @@ const LoginScreen = () => {
     return (
       <div className="login-container">
         <div className="logo-section">
-        <a onClick={() => navigate("main")}><img src={logoImg} alt="Noted Logo" className="logo" /></a>
+        <a onClick={() => navigate("/")}><img src={logoImg} alt="Noted Logo" className="logo" /></a>
           <h1>Noted.</h1>
           <p>Jegyzeteid egyszerűen és rendszerezetten</p>
         </div>
