@@ -276,7 +276,7 @@ export async function getUsersAdmin(req, res) {
             return
         }    
     
-        const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok')
+        const [rows] = await conn.execute('Select FelhasznaloId,FelhasznaloNev,Email from Felhasznalok')
         let users = rows
         if(!users) {
             res.status(500).send({error:'Sikertelen lekérdezés'})
