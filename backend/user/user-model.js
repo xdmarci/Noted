@@ -70,7 +70,7 @@ export async function getUserFromToken(req, res) {
         res.status(401).send({error:"Fiókja blokkolva van"})
         return 
     }
-    res.send(user)
+    res.status(200).send(user)
 }
 
 export async function updateUserWithToken(req, res) {
@@ -83,6 +83,10 @@ export async function updateUserWithToken(req, res) {
     const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
     let olduser = rows[0]
     let user = olduser
+    if(user.statusz == 0){
+        res.status(401).send({error:"Fiókja blokkolva van"})
+        return 
+    }
     if(!olduser) {
         res.status(500).send({error:'A felhasználó nem létezik'})
         return
@@ -122,8 +126,11 @@ export async function updateUserByIdAdmin(req, res) {
 
     const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
     let adminuser = rows2[0]
-
-    if(adminuser.JogosultsagId != 3 || adminuser.JogosultsagId != 2){
+    if(adminuser.statusz == 0){
+        res.status(401).send({error:"Fiókja blokkolva van"})
+        return 
+    }
+    if(adminuser.JogosultsagId != 3 && adminuser.JogosultsagId != 2){
         res.status(404).send({error:"Nincs joga más adatainak a frissítéséhez!"})
         return
     }    
@@ -172,7 +179,10 @@ export async function deleteUserByIdAdmin(req, res) {
 
     const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
     let adminuser = rows2[0]
-
+    if(adminuser.statusz == 0){
+        res.status(401).send({error:"Fiókja blokkolva van"})
+        return 
+    }
     if(adminuser.JogosultsagId != 3){
         res.status(404).send({error:"Nincs joga az adott művelet elvégzéshez!"})
         return
@@ -204,4 +214,84 @@ export async function deleteUserByIdAdmin(req, res) {
         }
         return
     }
+}
+export async function getUserByIdAdmin(req, res) {
+    if (!req.params.UserId)
+        {
+            res.status(401).send({error: "Hiányzó felhasználó azonosító"})
+            return
+        }
+        const conn = await mysqlP.createConnection(dbConfig)
+        if (!res.decodedToken.UserId) {
+            res.status(401).send({error:"Hiányzó paraméter"})
+            return
+        }
+    
+        const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+        let adminuser = rows2[0]
+        if(adminuser.statusz == 0){
+            res.status(401).send({error:"Fiókja blokkolva van"})
+            return 
+        }
+        if(adminuser.JogosultsagId != 3 && adminuser.JogosultsagId != 2){
+            res.status(404).send({error:"Nincs joga az adott művelet elvégzéshez!"})
+            return
+        }    
+    
+        const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = ?',[req.params.UserId])
+        let user = rows[0]
+        if(!user) {
+            res.status(500).send({error:'A felhasználó nem létezik'})
+            return
+        } 
+        res.status(200).send(user)
+    
+        try {
+        }
+        catch (err){
+            switch (err.errno) {
+                case 1062 : res.status(500).send({error:"Már létező felhasználó "});break;
+                case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
+                default:  res.status(500).send({error:"Hiba a törléskor: " + err}); break;
+            }
+            return
+        }
+}
+
+export async function getUsersAdmin(req, res) {
+        const conn = await mysqlP.createConnection(dbConfig)
+        if (!res.decodedToken.UserId) {
+            res.status(401).send({error:"Hiányzó paraméter"})
+            return
+        }
+    
+        const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+        let adminuser = rows2[0]
+        if(adminuser.statusz == 0){
+            res.status(401).send({error:"Fiókja blokkolva van"})
+            return 
+        }
+        if(adminuser.JogosultsagId != 3 && adminuser.JogosultsagId != 2){
+            res.status(404).send({error:"Nincs joga az adott művelet elvégzéshez!"})
+            return
+        }    
+    
+        const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok')
+        let users = rows
+        if(!users) {
+            res.status(500).send({error:'Sikertelen lekérdezés'})
+            return
+        } 
+        res.status(200).send(users)
+    
+        try {
+        }
+        catch (err){
+            switch (err.errno) {
+                case 1062 : res.status(500).send({error:"Már létező felhasználó "});break;
+                case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
+                default:  res.status(500).send({error:"Hiba a törléskor: " + err}); break;
+            }
+            return
+        }
 }
