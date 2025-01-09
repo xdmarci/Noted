@@ -33,8 +33,19 @@ fetch('http://localhost:3000/Admupdateuser/111', {
     method:'PUT',headers: new Headers(
         {"Content-Type": "application/json",
             "Accept": "application/json",
-            "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczNjExNjMxNCwiZXhwIjoxNzM2MTIzNTE0fQ.ywgYXes3hTwidVNehvFfw1Nwv_rlEdPurbBoe4rwwCQ"}
+            "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczNjQyMzQ1MywiZXhwIjoxNzM2NDMwNjUzfQ.Bt79LGXVX_CMl5AOxN8RnUR45IRjYyX3qfHAvWjmFC8"}
     ),
     body:JSON.stringify({"statusz":0})
+}).then(response => response.json())
+  .then(data => console.log(data))
+
+
+törlés
+  fetch('http://localhost:3000/Admdeleteuser/115', {
+    method:'DELETE',headers: new Headers(
+        {"Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczNjQyMzQ1MywiZXhwIjoxNzM2NDMwNjUzfQ.Bt79LGXVX_CMl5AOxN8RnUR45IRjYyX3qfHAvWjmFC8"}
+    )
 }).then(response => response.json())
   .then(data => console.log(data))

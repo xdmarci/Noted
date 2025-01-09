@@ -1,4 +1,3 @@
-import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 
 export default function verifyToken(req,res,next){

@@ -8,5 +8,6 @@ router.post('/register',user.Register)
 router.get('/getUser',auth,user.getUserFromToken)
 router.put('/updateuser',auth,user.updateUserWithToken)
 router.put('/Admupdateuser/:UserId',auth,user.updateUserByIdAdmin)
+router.delete('/Admdeleteuser/:UserId',auth,user.deleteUserByIdAdmin)
 
 export default router
