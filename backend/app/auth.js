@@ -20,7 +20,7 @@ export default function verifyToken(req,res,next){
         next()
     } 
     catch (error) {
-        res.status(401).send({error:"Hibás token"})
+        res.status(401).send({error:"Hibás token",err:error})
         return
     }
 }

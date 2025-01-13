@@ -14,6 +14,7 @@ const Profile = () => {
       };
 
     const editProfile = (user, email, password) => {
+        event.preventDefault();
         fetch('http://localhost:3000/updateuser', {
             method:'PUT',headers: new Headers(
                 {"Content-Type": "application/json",
@@ -21,28 +22,22 @@ const Profile = () => {
                     "x-access-token":localStorage.getItem('token')}
             ),
             body:JSON.stringify({
-                "Email":email,
-                "Password":password,
-                "Username":user})
+                Email:email,
+                Jelszo:password,
+                FelhasznaloNev:user})
         }).then(response => response.json())
           .then(data => {
             if (data.success) {
-                alert(data.succes)
-                console.log(data.succes)
+                alert(data.success)
+                console.log(data.success)
                 navigate('/home');
             }
             else {
                 alert(data.error)
-                console.log(data.error)
-                
+                console.log(data)
+
             }
-            
-
           })
-        
-
-        navigate('/home');
-
      }
 
 

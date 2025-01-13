@@ -52,9 +52,9 @@ const LoginScreen = () => {
                     alert(data.error)
                     console.log(data.error)
                   } else {
-                    alert(data.succes)
-                    console.log(data)
-                    localStorage.setItem('token', data.token);
+                    alert(data.success)
+                    console.log(data.Token)
+                    localStorage.setItem('token', data.Token);
                     navigate('/home');
                   }
                 })

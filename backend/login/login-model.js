@@ -42,7 +42,7 @@ export default async function logIn(req,res){
         const payload = {UserId:user.FelhasznaloId}
         const {JWT_STRING} = process.env
         user.Token = jwt.sign(payload,JWT_STRING,{ expiresIn:"2h"});
-        res.status(200).send({succes:"Sikeres bejelentkezés",Token:user.Token})
+        res.status(200).send({success:"Sikeres bejelentkezés",Token:user.Token})
     }
     catch(err){
         console.log(err)

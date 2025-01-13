@@ -43,7 +43,7 @@ export async function Register(req,res) {
         }
         const [rows] = await conn.execute('insert into Felhasznalok values(null,?,?,?,?,?)',[user.FelhasznaloNev,user.Jelszo,user.Email,user.Statusz,user.JogosultsagId])
         if (rows.affectedRows > 0) {
-            res.status(201).send({succes:"Sikeres regisztráció",data:user})
+            res.status(201).send({success:"Sikeres regisztráció",data:user})
             return  
         }
         res.status(404).send({error:"Hiba a regisztrációkor!"})
@@ -97,7 +97,7 @@ export async function updateUserWithToken(req, res) {
         const [rows] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,res.decodedToken.UserId])
         user.Jelszo=undefined
         if (rows.affectedRows > 0) {
-            res.status(201).send({succes:"Sikeres frissítés",data:user})
+            res.status(201).send({success:"Sikeres frissítés",data:user})
             return  
         }
         res.status(404).send({error:"Sikertelen az adatok frissítése!"})
@@ -149,7 +149,7 @@ export async function updateUserByIdAdmin(req, res) {
         const [rows] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=?, Statusz=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,user.statusz,req.params.UserId])
         user.Jelszo=undefined
         if (rows.affectedRows > 0) {
-            res.status(201).send({succes:"Sikeres frissítés",data:user})
+            res.status(201).send({success:"Sikeres frissítés",data:user})
             return  
         }
         res.status(404).send({error:"Sikertelen az adatok frissítése!"})
@@ -201,7 +201,7 @@ export async function deleteUserByIdAdmin(req, res) {
         const [rows] = await conn.execute('DELETE from Felhasznalok where FelhasznaloId =?',[req.params.UserId])
         user.Jelszo=undefined
         if (rows.affectedRows > 0) {
-            res.status(201).send({succes:"Sikeres törlés",data:user})
+            res.status(201).send({success:"Sikeres törlés",data:user})
             return  
         }
         res.status(404).send({error:"Sikertelen a felhasználó törlése!"})
