@@ -9,7 +9,7 @@ const Profile = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('token');
         navigate('/');
       };
 
