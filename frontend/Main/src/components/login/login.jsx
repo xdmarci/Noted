@@ -54,7 +54,7 @@ const LoginScreen = () => {
                   } else {
                     alert(data.succes)
                     console.log(data)
-                    localStorage.setItem('Token', data.Token);
+                    localStorage.setItem('isLoggedIn', 'true');
                     navigate('/home');
                   }
                 })
