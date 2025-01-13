@@ -63,8 +63,7 @@ CREATE TABLE Jogosultsagok (
 
 -- Alap jogosultságok felétele
 INSERT INTO Jogosultsagok (Jogosultsag) 
-VALUES ('Admin'), ('Moderator'), ('Member');
-
+VALUES ('Member'), ('Moderator'), ('Admin');
 CREATE FUNCTION `Titkos`(pwd VARCHAR(100)) RETURNS blob
     DETERMINISTIC
 Begin
