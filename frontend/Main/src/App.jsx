@@ -5,6 +5,7 @@ import Main from "./components/Main/Main";
 import Register from "./components/register/register";
 import Login from "./components/login/login";
 import Profile from "./components/Profile/Profile";
+import Admin from "./components/admin/admin";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/register" element={<Register/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/admin" element={<Admin/>}/>
         
       </Routes>
     </Router>

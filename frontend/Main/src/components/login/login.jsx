@@ -1,23 +1,20 @@
 import React, { useState } from "react";
 import logoImg from "../../assets/logo_main.png";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 const LoginScreen = () => {
-
   const navigate = useNavigate();
 
   const [currentScreen, setCurrentScreen] = useState("/login");
 
   const renderContent = (e) => {
-
-    
-
-
     return (
       <div className="login-container">
         <div className="logo-section">
-        <a onClick={() => navigate("/")}><img src={logoImg} alt="Noted Logo" className="logo" /></a>
+          <a onClick={() => navigate("/")}>
+            <img src={logoImg} alt="Noted Logo" className="logo" />
+          </a>
           <h1>Noted.</h1>
           <p>Jegyzeteid egyszerűen és rendszerezetten</p>
         </div>
@@ -35,31 +32,36 @@ const LoginScreen = () => {
               placeholder="jelszó"
               className="input-field"
             />
-            <button type="submit" className="btn" onClick={
-              (event) => {
+            <button
+              type="submit"
+              className="btn"
+              onClick={(event) => {
                 event.preventDefault();
-                fetch('http://localhost:3000/login', {
-                  method:'POST',headers: new Headers(
-                      {"Content-Type": "application/json",
-                          "Accept": "application/json"}
-                  ),
-                  body:JSON.stringify({
-                  Jelszo: document.getElementById('password').value,
-                  Email: document.getElementById('email').value,})
-              }).then(response => response.json())
-                .then (data => {
-                  if (data.error) {
-                    alert(data.error)
-                    console.log(data)
-                  } else {
-                    alert(data.success)
-                    console.log(data.Token)
-                    localStorage.setItem('token', data.Token);
-                    navigate('/home');
-                  }
+                fetch("http://localhost:3000/login", {
+                  method: "POST",
+                  headers: new Headers({
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                  }),
+                  body: JSON.stringify({
+                    Jelszo: document.getElementById("password").value,
+                    Email: document.getElementById("email").value,
+                  }),
                 })
-              }
-            }>
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.error) {
+                      alert(data.error);
+                      console.log(data);
+                    } else {
+                      alert(data.success);
+                      console.log(data.Token);
+                      localStorage.setItem("token", data.Token);
+                      navigate("/home");
+                    }
+                  });
+              }}
+            >
               Bejelentkezés
             </button>
           </form>
@@ -69,7 +71,6 @@ const LoginScreen = () => {
   };
 
   return renderContent();
-  
 };
 
 export default LoginScreen;
