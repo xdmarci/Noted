@@ -63,8 +63,7 @@ CREATE TABLE Jogosultsagok (
 
 -- Alap jogosultságok felétele
 INSERT INTO Jogosultsagok (Jogosultsag) 
-VALUES ('Admin'), ('Moderator'), ('Member');
-
+VALUES ('Member'), ('Moderator'), ('Admin');
 CREATE FUNCTION `Titkos`(pwd VARCHAR(100)) RETURNS blob
     DETERMINISTIC
 Begin
@@ -90,3 +89,11 @@ ON Felhasznalok
 for each row set
 new.Email = LOWER(new.Email),
 new.Jelszo = `Titkos`(new.Jelszo);
+
+CREATE TRIGGER updateUser
+BEFORE UPDATE
+ON Felhasznalok
+FOR EACH ROW
+SET
+  NEW.Email = LOWER(NEW.Email),
+  NEW.Jelszo = `Titkos`(NEW.Jelszo);
