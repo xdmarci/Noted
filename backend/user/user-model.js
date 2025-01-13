@@ -70,7 +70,7 @@ export async function getUserFromToken(req, res) {
         res.status(401).send({error:"Fiókja blokkolva van"})
         return 
     }
-    res.status(200).send(user)
+    res.status(200).send({success:"Sikeres lekérdezés",data:user})
 }
 
 export async function updateUserWithToken(req, res) {
@@ -244,7 +244,7 @@ export async function getUserByIdAdmin(req, res) {
             res.status(500).send({error:'A felhasználó nem létezik'})
             return
         } 
-        res.status(200).send(user)
+        res.status(200).send({success:"Sikeres frissítés",data:user})
     
         try {
         }
@@ -282,7 +282,7 @@ export async function getUsersAdmin(req, res) {
             res.status(500).send({error:'Sikertelen lekérdezés'})
             return
         } 
-        res.status(200).send(users)
+        res.status(200).send({success:"Sikeres frissítés",data:users})
     
         try {
         }
