@@ -22,6 +22,9 @@ const Home = () => {
     localStorage.removeItem('Token');
     navigate('/');
   };
+  const checkProfile = () => { 
+    navigate('/profile');
+  }
   
   const renderContent = () => {
 
@@ -41,6 +44,16 @@ const Home = () => {
     />
     <div className="buttons">
       <button onClick={handleLogout}>Kijelentkezés</button>
+    <input
+      type="text"
+      class="search-bar"
+      placeholder="Keresés"
+    />
+  <div className="top-bar">
+    <button className="new-note-btn">+ Új</button>
+    
+    <div className="buttons">
+      <button onClick={checkProfile}>Profil</button>
       <button onClick={() => requestAdmin()}>Admin kérés</button>
     </div>
   </div>

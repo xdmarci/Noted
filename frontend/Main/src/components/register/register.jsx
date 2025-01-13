@@ -73,7 +73,7 @@ const RegisterScreen = () => {
                   } else {
                     alert(data.succes)
                     console.log(data.succes)
-                    setCurrentScreen("login");
+                    navigate('/login');
                   }
                 })
                 .catch(error => console.log(error));

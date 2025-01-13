@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import logoImg from "../../assets/logo_main.png";
 import { useNavigate } from 'react-router-dom';
 import "./login.css";
-import Main from "../Main/Main";
-import Home from "../../../../home/src/components/Home/Home";
 
 const LoginScreen = () => {
 
