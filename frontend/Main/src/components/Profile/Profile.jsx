@@ -13,6 +13,8 @@ const Profile = () => {
         navigate('/');
       };
 
+    
+
     const editProfile = (user, email, password) => {
         event.preventDefault();
         fetch('http://localhost:3000/updateuser', {
@@ -34,10 +36,13 @@ const Profile = () => {
             }
             else {
                 alert(data.error)
-                console.log(data)
-
+                console.log(data.error)
             }
           })
+        
+
+        
+
      }
 
 
@@ -59,12 +64,13 @@ const Profile = () => {
                         <label htmlFor="password">Jelszó:</label>
                         <input type="password" id="password" name="password" />
                     </div>
-                    <button type="submit" onClick={() => (editProfile(
+                    <button  onClick={(event) => (event.preventDefault(),
+                    editProfile(
                         document.getElementById('username').value,
                         document.getElementById('email').value,
                         document.getElementById('password').value
                     ))} >Változtatások mentése</button>
-                    <button onClick={handleLogout}>Logout</button>
+                    <button onClick={handleLogout}>Kijelentkezés</button>
                 </form>
                 
             </div>

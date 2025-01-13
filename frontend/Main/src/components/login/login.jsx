@@ -50,7 +50,7 @@ const LoginScreen = () => {
                 .then (data => {
                   if (data.error) {
                     alert(data.error)
-                    console.log(data.error)
+                    console.log(data)
                   } else {
                     alert(data.success)
                     console.log(data.Token)
