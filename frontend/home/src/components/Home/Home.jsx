@@ -1,21 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import './home.css';
-import Main from '../../../../Main/src/components/Main/Main';
+import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
+  const requestAdmin = () => {
+    
+   };
 
-  const [currentScreen, setCurrentScreen] = useState("home");
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn !== 'true') {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  const checkProfile = () => { 
+    navigate('/profile');
+  }
+  
   const renderContent = () => {
 
-    if (currentScreen === "main") return <Main />;
+    
+
+    
 
   return (
-    <div>
-      <h1>{}</h1>
-      <button onClick={() => setCurrentScreen("main")}>Log Out</button>
+
+      <div className="main-container">
+    <input
+      type="text"
+      class="search-bar"
+      placeholder="Keresés"
+    />
+  <div className="top-bar">
+    <button className="new-note-btn">+ Új</button>
+    
+    <div className="buttons">
+      <button onClick={checkProfile}>Profil</button>
+      <button onClick={() => requestAdmin()}>Admin kérés</button>
     </div>
+  </div>
+  <div className="content">
+    <div className="notes-section">
+      <h2>Jegyzetek.</h2>
+      <p className="empty-msg">
+        Üres, mint egy új kezdet. Jegyzetelj valamit!
+      </p>
+    </div>
+    <div className="shared-notes-section">
+      <h2>Megosztott jegyzetek.</h2>
+      <p className="empty-msg">
+        Úgy tűnik, itt még senki nem osztott meg semmit... Kezdjétek el
+        közösen!
+      </p>
+    </div>
+  </div>
+</div>
+
   );
   };
   return renderContent();

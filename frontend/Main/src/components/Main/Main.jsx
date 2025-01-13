@@ -1,12 +1,14 @@
 import logoImg from "../../assets/logo_main.png";
 import "./Main.css";
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import LoginScreen from "../login/login";
 import RegisterScreen from "../register/register";
 
 const Main = () => {
+  const navigate = useNavigate();
 
-  const [currentScreen, setCurrentScreen] = useState("main");
+  const [currentScreen, setCurrentScreen] = useState("/");
 
   const renderContent = () => {
     if (currentScreen === "login") return <LoginScreen />;
@@ -20,8 +22,8 @@ const Main = () => {
             <p>Jegyzeteid egyszerűen és rendszerezetten</p>
           </div>
           <div className="button-section">
-            <button className="btn" onClick={() => setCurrentScreen("register")}>Regisztráció</button>
-            <button className="btn" onClick={() => setCurrentScreen("login")}>Bejelentkezés</button>
+            <button className="btn" onClick={() => navigate("/register")}>Regisztráció</button>
+            <button className="btn" onClick={() => navigate("/login")}>Bejelentkezés</button>
           </div>
         </div>
       </div>

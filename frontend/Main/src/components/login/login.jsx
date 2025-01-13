@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import logoImg from "../../assets/logo_main.png";
+import { useNavigate } from 'react-router-dom';
 import "./login.css";
-import Main from "../Main/Main";
-import Home from "../../../../home/src/components/Home/Home";
 
 const LoginScreen = () => {
 
-  const [currentScreen, setCurrentScreen] = useState("login");
+  const navigate = useNavigate();
 
+  const [currentScreen, setCurrentScreen] = useState("/login");
 
-  const renderContent = () => {
+  const renderContent = (e) => {
 
-    if (currentScreen === "main") return <Main />;
-    if (currentScreen === "home") return <Home />;
+    
+
 
     return (
       <div className="login-container">
         <div className="logo-section">
-        <a onClick={() => setCurrentScreen("main")}><img src={logoImg} alt="Noted Logo" className="logo" /></a>
+        <a onClick={() => navigate("/")}><img src={logoImg} alt="Noted Logo" className="logo" /></a>
           <h1>Noted.</h1>
           <p>Jegyzeteid egyszerűen és rendszerezetten</p>
         </div>
@@ -54,7 +54,8 @@ const LoginScreen = () => {
                   } else {
                     alert(data.succes)
                     console.log(data)
-                    setCurrentScreen("home");
+                    localStorage.setItem('isLoggedIn', 'true');
+                    navigate('/home');
                   }
                 })
               }
