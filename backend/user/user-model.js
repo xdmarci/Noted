@@ -56,6 +56,9 @@ export async function Register(req,res) {
         }
         return
     }
+    finally{
+        conn.end()
+    }
 }
 
 export async function getUserFromToken(req, res) {
@@ -64,13 +67,26 @@ export async function getUserFromToken(req, res) {
         res.status(401).send({error:"Hiányzó paraméter"})
         return
     }
-    const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
-    let user = rows[0]
-    if(user.statusz == 0){
-        res.status(401).send({error:"Fiókja blokkolva van"})
-        return 
+    try{
+        const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+        let user = rows[0]
+        if(user.statusz == 0){
+            res.status(401).send({error:"Fiókja blokkolva van"})
+            return 
+        }
+        res.status(200).send({success:"Sikeres lekérdezés",data:user})
+        return
     }
-    res.status(200).send({success:"Sikeres lekérdezés",data:user})
+    catch (err){
+        switch (err.errno) {
+            case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
+            default:  res.status(500).send({error:"Hiba az adatok lekérdezésekor: " + err}); break;
+        }
+        return
+    }
+    finally{
+        conn.end()
+    }
 }
 
 export async function updateUserWithToken(req, res) {
@@ -106,9 +122,12 @@ export async function updateUserWithToken(req, res) {
         switch (err.errno) {
             case 1062 : res.status(500).send({error:"Már létező felhasználó "});break;
             case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
-            default:  res.status(500).send({error:"Hiba a frissítéskor: " + err}); break;
+            default:  res.status(500).send({error:"Hiba az adatok frissítésekor: " + err}); break;
         }
         return
+    }
+    finally{
+        conn.end()
     }
 }
 
@@ -162,6 +181,9 @@ export async function updateUserByIdAdmin(req, res) {
         }
         return
     }
+    finally{
+        conn.end()
+    }
 }
 
 
@@ -208,11 +230,13 @@ export async function deleteUserByIdAdmin(req, res) {
     }
     catch (err){
         switch (err.errno) {
-            case 1062 : res.status(500).send({error:"Már létező felhasználó "});break;
             case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
             default:  res.status(500).send({error:"Hiba a törléskor: " + err}); break;
         }
         return
+    }
+    finally{
+        conn.end()
     }
 }
 export async function getUserByIdAdmin(req, res) {
@@ -244,17 +268,19 @@ export async function getUserByIdAdmin(req, res) {
             res.status(500).send({error:'A felhasználó nem létezik'})
             return
         } 
-        res.status(200).send({success:"Sikeres frissítés",data:user})
+        res.status(200).send({success:"Sikeres lekérdezés",data:user})
     
         try {
         }
         catch (err){
             switch (err.errno) {
-                case 1062 : res.status(500).send({error:"Már létező felhasználó "});break;
                 case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
-                default:  res.status(500).send({error:"Hiba a törléskor: " + err}); break;
+                default:  res.status(500).send({error:"Hiba az adatok lekérdezésekor: " + err}); break;
             }
             return
+        }
+        finally{
+            conn.end()
         }
 }
 
@@ -282,16 +308,18 @@ export async function getUsersAdmin(req, res) {
             res.status(500).send({error:'Sikertelen lekérdezés'})
             return
         } 
-        res.status(200).send({success:"Sikeres frissítés",data:users})
+        res.status(200).send({success:"Sikeres lekérdezés",data:users})
     
         try {
         }
         catch (err){
             switch (err.errno) {
-                case 1062 : res.status(500).send({error:"Már létező felhasználó "});break;
                 case 1045 : res.status(500).send({error:"Hiba a csatlakozáskor nem megfelelő adatbázis jelszó"}); break;
-                default:  res.status(500).send({error:"Hiba a törléskor: " + err}); break;
+                default:  res.status(500).send({error:"Hiba a lekérdezéskor: " + err}); break;
             }
             return
+        }
+        finally{
+            conn.end()
         }
 }

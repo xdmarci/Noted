@@ -19,24 +19,24 @@ export class User{
         catch {
             return undefined
         }
+        finally{
+            conn.end()
+        }
     }
 
     static async validUser (Email,Jelszo) {
-        let conn;
         try {
-            conn = await mysqlP.createConnection(dbConfig)
+            const conn = await mysqlP.createConnection(dbConfig)
             const sql = 'select Login(?,?) as FelhasznaloId'
             const [rows] = await conn.execute(sql,[Email,Jelszo])
             return rows[0]?.FelhasznaloId || 0
         }
         catch (err) {
-            console.error('Error during SQL execution:', err);
+            console.error('Error a login közbe:', err);
             return 0; 
         } 
         finally{
-            if (conn) {
-              await conn.end();
-            }
+            await conn.end();
         }
     }
 }
