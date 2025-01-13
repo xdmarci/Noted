@@ -50,11 +50,13 @@ const LoginScreen = () => {
                 .then (data => {
                   if (data.error) {
                     alert(data.error)
-                    console.log(data.error)
+                    console.log(data)
                   } else {
                     alert(data.succes)
                     console.log(data)
-                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('token', data.Token);
+                    console.log(data.Token);
+                    console.log(localStorage.getItem('token'));
                     navigate('/home');
                   }
                 })

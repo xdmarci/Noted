@@ -13,7 +13,11 @@ const Profile = () => {
         navigate('/');
       };
 
+    
+
     const editProfile = (user, email, password) => {
+
+
         fetch('http://localhost:3000/updateuser', {
             method:'PUT',headers: new Headers(
                 {"Content-Type": "application/json",
@@ -22,26 +26,23 @@ const Profile = () => {
             ),
             body:JSON.stringify({
                 "Email":email,
-                "Password":password,
-                "Username":user})
+                "Jelszo":password,
+                "Felhasznalonev":user})
         }).then(response => response.json())
           .then(data => {
-            if (data.success) {
+            if (data.succes) {
                 alert(data.succes)
-                console.log(data.succes)
+                console.log(data)
                 navigate('/home');
             }
             else {
                 alert(data.error)
                 console.log(data.error)
-                
             }
-            
-
           })
         
 
-        navigate('/home');
+        
 
      }
 
@@ -64,12 +65,13 @@ const Profile = () => {
                         <label htmlFor="password">Jelszó:</label>
                         <input type="password" id="password" name="password" />
                     </div>
-                    <button type="submit" onClick={() => (editProfile(
+                    <button  onClick={(event) => (event.preventDefault(),
+                    editProfile(
                         document.getElementById('username').value,
                         document.getElementById('email').value,
                         document.getElementById('password').value
                     ))} >Változtatások mentése</button>
-                    <button onClick={handleLogout}>Logout</button>
+                    <button onClick={handleLogout}>Kijelentkezés</button>
                 </form>
                 
             </div>
