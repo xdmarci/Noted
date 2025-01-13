@@ -97,7 +97,7 @@ export async function updateUserWithToken(req, res) {
         const [rows] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,res.decodedToken.UserId])
         user.Jelszo=undefined
         if (rows.affectedRows > 0) {
-            res.status(201).send({success:"Sikeres frissítés",data:user})
+            res.status(201).send({success:"Sikeres lekérdezés",data:user})
             return  
         }
         res.status(404).send({error:"Sikertelen az adatok frissítése!"})
@@ -244,7 +244,7 @@ export async function getUserByIdAdmin(req, res) {
             res.status(500).send({error:'A felhasználó nem létezik'})
             return
         } 
-        res.status(200).send({success:"Sikeres frissítés",data:user})
+        res.status(200).send({success:"Sikeres lekérdezés",data:user})
     
         try {
         }
