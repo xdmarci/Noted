@@ -1,5 +1,5 @@
 import logoImg from "../../assets/logo_main.png";
-import "./Main.css";
+import "./Main.scss";
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import LoginScreen from "../login/login";

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import "./profile.css";
+import "./profile.scss";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -40,35 +40,37 @@ const Profile = () => {
 
   const renderContent = () => {
     return (
-      <div className="container">
-        <form>
-          <h2>Profil szerkeztése</h2>
-          <div>
-            <label htmlFor="username">Felhasználónév:</label>
-            <input type="text" id="username" name="username" />
-          </div>
-          <div>
-            <label htmlFor="email">Email:</label>
-            <input type="email" id="email" name="email" />
-          </div>
-          <div>
-            <label htmlFor="password">Jelszó:</label>
-            <input type="password" id="password" name="password" />
-          </div>
-          <button
-            onClick={(event) => (
-              event.preventDefault(),
-              editProfile(
-                document.getElementById("username").value,
-                document.getElementById("email").value,
-                document.getElementById("password").value
-              )
-            )}
-          >
-            Változtatások mentése
-          </button>
-          <button onClick={handleLogout}>Kijelentkezés</button>
-        </form>
+      <div className="profile-site">
+        <div className="container">
+          <form>
+            <h2>Profil szerkeztése</h2>
+            <div>
+              <label htmlFor="username">Felhasználónév:</label>
+              <input type="text" id="username" name="username" />
+            </div>
+            <div>
+              <label htmlFor="email">Email:</label>
+              <input type="email" id="email" name="email" />
+            </div>
+            <div>
+              <label htmlFor="password">Jelszó:</label>
+              <input type="password" id="password" name="password" />
+            </div>
+            <button
+              onClick={(event) => (
+                event.preventDefault(),
+                editProfile(
+                  document.getElementById("username").value,
+                  document.getElementById("email").value,
+                  document.getElementById("password").value
+                )
+              )}
+            >
+              Változtatások mentése
+            </button>
+            <button onClick={handleLogout}>Kijelentkezés</button>
+          </form>
+        </div>
       </div>
     );
   };
