@@ -15,18 +15,16 @@ const Main = () => {
     if (currentScreen === "register") return <RegisterScreen />;
     return (
       <div className="main-site">
-        <div className="main-container">
-          <div className="card">
-            <div className="content-container">
-              <div className="logo-section">
-                <img src={logoImg} alt="Noted Logo" className="logo" />
-                <h1>Noted.</h1>
-                <p>Jegyzeteid egyszerűen és rendszerezetten</p>
-              </div>
-              <div className="button-section">
-                <button className="btn" onClick={() => navigate("/register")}>Regisztráció</button>
-                <button className="btn" onClick={() => navigate("/login")}>Bejelentkezés</button>
-              </div>
+        <div className="card">
+          <div className="content-container">
+            <div className="logo-section">
+              <img src={logoImg} alt="Noted Logo" className="logo" />
+              <h1>Noted.</h1>
+              <p>Jegyzeteid egyszerűen és rendszerezetten</p>
+            </div>
+            <div className="button-section">
+              <button className="btn" onClick={() => navigate("/register")}>Regisztráció</button>
+              <button className="btn" onClick={() => navigate("/login")}>Bejelentkezés</button>
             </div>
           </div>
         </div>
