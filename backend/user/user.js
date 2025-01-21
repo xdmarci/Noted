@@ -11,8 +11,8 @@ export class User{
     Token
 
     static async loadDataFromDB(UserId){
+        const conn = await mysqlP.createConnection(dbConfig)
         try {
-            const conn = await mysqlP.createConnection(dbConfig)
             const[rows]= await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[UserId])
             return rows[0]
         }
@@ -25,8 +25,8 @@ export class User{
     }
 
     static async validUser (Email,Jelszo) {
+        const conn = await mysqlP.createConnection(dbConfig)
         try {
-            const conn = await mysqlP.createConnection(dbConfig)
             const sql = 'select Login(?,?) as FelhasznaloId'
             const [rows] = await conn.execute(sql,[Email,Jelszo])
             return rows[0]?.FelhasznaloId || 0
@@ -36,7 +36,7 @@ export class User{
             return 0; 
         } 
         finally{
-            await conn.end();
+            conn.end()
         }
     }
 }

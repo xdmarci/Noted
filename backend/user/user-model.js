@@ -1,6 +1,6 @@
 import mysqlP from 'mysql2/promise'
 import dbConfig from '../app/config.js'
-
+import checkInput from '../app/functions.js'
 
 export async function Register(req,res) {
     const user = req.body
@@ -12,15 +12,11 @@ export async function Register(req,res) {
     try {
     
         const conn = await mysqlP.createConnection(dbConfig)
-        const invalidCharaters = ['`',';',',','(',')',"'",'"','=','$'];
-        for(let i = 0; i < invalidCharaters.length; i++)
-        {
-            if(user.FelhasznaloNev.includes(invalidCharaters[i]) || user.Jelszo.includes(invalidCharaters[i]) || user.Email.includes(invalidCharaters[i]))
-            {
-                res.status(404).send({error:"Nem megengedett karakterek használata."})
-                return
-            }
+        if(!checkInput(user.Email) || !checkInput(user.FelhasznaloNev) || !checkInput(user.Jelszo)){
+            res.status(404).send({error:"Nem megengedett karakterek használata."})
+            return
         }
+        
         if(user.Jelszo.length < 8){
             res.status(404).send({error:"túl rövid a jelszó minimum hossz: 8!"})
             return
