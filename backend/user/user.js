@@ -1,7 +1,7 @@
 import mysqlP from 'mysql2/promise'
 import dbConfig from '../app/config.js'
 
-export class User{
+export class User {
     FelhasznaloId
     FelhasznaloNev
     Jelszo
@@ -10,32 +10,32 @@ export class User{
     JogosultsagId
     Token
 
-    static async loadDataFromDB(UserId){
+    static async loadDataFromDB(UserId) {
         const conn = await mysqlP.createConnection(dbConfig)
         try {
-            const[rows]= await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[UserId])
+            const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?', [UserId])
             return rows[0]
         }
         catch {
             return undefined
         }
-        finally{
+        finally {
             conn.end()
         }
     }
 
-    static async validUser (Email,Jelszo) {
+    static async validUser(Email, Jelszo) {
         const conn = await mysqlP.createConnection(dbConfig)
         try {
             const sql = 'select Login(?,?) as FelhasznaloId'
-            const [rows] = await conn.execute(sql,[Email,Jelszo])
+            const [rows] = await conn.execute(sql, [Email, Jelszo])
             return rows[0]?.FelhasznaloId || 0
         }
         catch (err) {
             console.error('Error a login közbe:', err);
-            return 0; 
-        } 
-        finally{
+            return 0;
+        }
+        finally {
             conn.end()
         }
     }
