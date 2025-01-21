@@ -9,9 +9,8 @@ export async function Register(req,res) {
         res.status(400).send({error: "Hiányzó adatok"})
         return
     }
+    const conn = await mysqlP.createConnection(dbConfig)
     try {
-    
-        const conn = await mysqlP.createConnection(dbConfig)
         if(!checkInput(user.Email) || !checkInput(user.FelhasznaloNev) || !checkInput(user.Jelszo)){
             res.status(404).send({error:"Nem megengedett karakterek használata."})
             return
@@ -58,11 +57,11 @@ export async function Register(req,res) {
 }
 
 export async function getUserFromToken(req, res) {
-    const conn = await mysqlP.createConnection(dbConfig)
     if (!res.decodedToken.UserId) {
         res.status(401).send({error:"Hiányzó paraméter"})
         return
     }
+    const conn = await mysqlP.createConnection(dbConfig)
     try{
         const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
         let user = rows[0]
@@ -86,29 +85,34 @@ export async function getUserFromToken(req, res) {
 }
 
 export async function updateUserWithToken(req, res) {
-    const conn = await mysqlP.createConnection(dbConfig)
     if (!res.decodedToken.UserId) {
         res.status(401).send({error:"Hiányzó paraméter"})
         return
     }
-
-    const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
-    let olduser = rows[0]
-    let user = olduser
-    if(user.statusz == 0){
-        res.status(401).send({error:"Fiókja blokkolva van"})
-        return 
-    }
-    if(!olduser) {
-        res.status(500).send({error:'A felhasználó nem létezik'})
+    if(!req.body){
+        res.status(404).send({error:"Hiányzó adatok"})
         return
-    } 
-    Object.assign(user,req.body)
+    }
+    const conn = await mysqlP.createConnection(dbConfig)
     try {
-        const conn = await mysqlP.createConnection(dbConfig)
-        const [rows] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,res.decodedToken.UserId])
+        const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+        let olduser = rows[0]
+        let user = olduser
+        if(user.statusz == 0){
+            res.status(401).send({error:"Fiókja blokkolva van"})
+            return 
+        }
+
+        if(!olduser) {
+            res.status(500).send({error:'A felhasználó nem létezik'})
+            return
+        } 
+
+        Object.assign(user,req.body)
+
+        const [rows2] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,res.decodedToken.UserId])
         user.Jelszo=undefined
-        if (rows.affectedRows > 0) {
+        if (rows2.affectedRows > 0) {
             res.status(201).send({success:"Sikeres frissítés",data:user})
             return  
         }
@@ -133,37 +137,35 @@ export async function updateUserByIdAdmin(req, res) {
         res.status(401).send({error: "Hiányzó felhasználó azonosító"})
         return
     }
-    const conn = await mysqlP.createConnection(dbConfig)
     if (!res.decodedToken.UserId) {
         res.status(401).send({error:"Hiányzó paraméter"})
         return
     }
-
-    const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
-    let adminuser = rows2[0]
-    if(adminuser.statusz == 0){
-        res.status(401).send({error:"Fiókja blokkolva van"})
-        return 
-    }
-    if(adminuser.JogosultsagId != 3 && adminuser.JogosultsagId != 2){
-        res.status(404).send({error:"Nincs joga más adatainak a frissítéséhez!"})
-        return
-    }    
-
-    const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[req.params.UserId])
-    let olduser = rows[0]
-    let user = olduser
-    if(!olduser) {
-        res.status(500).send({error:'A felhasználó nem létezik'})
-        return
-    } 
-
-    Object.assign(user,req.body)
+    const conn = await mysqlP.createConnection(dbConfig)
     try {
-        const conn = await mysqlP.createConnection(dbConfig)
-        const [rows] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=?, Statusz=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,user.statusz,req.params.UserId])
+        const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+        let adminuser = rows[0]
+        if(adminuser.statusz == 0){
+            res.status(401).send({error:"Fiókja blokkolva van"})
+            return 
+        }
+        if(adminuser.JogosultsagId != 3 && adminuser.JogosultsagId != 2){
+            res.status(404).send({error:"Nincs joga más adatainak a frissítéséhez!"})
+            return
+        }    
+    
+        const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[req.params.UserId])
+        let olduser = rows2[0]
+        let user = olduser
+        if(!olduser) {
+            res.status(500).send({error:'A felhasználó nem létezik'})
+            return
+        } 
+    
+        Object.assign(user,req.body)
+        const [rows3] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=?, Statusz=? where FelhasznaloId =?',[user.FelhasznaloNev,user.Email,user.Jelszo,user.statusz,req.params.UserId])
         user.Jelszo=undefined
-        if (rows.affectedRows > 0) {
+        if (rows3.affectedRows > 0) {
             res.status(201).send({success:"Sikeres frissítés",data:user})
             return  
         }
@@ -194,31 +196,28 @@ export async function deleteUserByIdAdmin(req, res) {
         res.status(401).send({error:"Hiányzó paraméter"})
         return
     }
-
-    const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
-    let adminuser = rows2[0]
-    if(adminuser.statusz == 0){
-        res.status(401).send({error:"Fiókja blokkolva van"})
-        return 
-    }
-    if(adminuser.JogosultsagId != 3){
-        res.status(404).send({error:"Nincs joga az adott művelet elvégzéshez!"})
-        return
-    }    
-
-    const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[req.params.UserId])
-    let olduser = rows[0]
-    let user = olduser
-    if(!olduser) {
-        res.status(500).send({error:'A felhasználó nem létezik'})
-        return
-    } 
-
     try {
-        const conn = await mysqlP.createConnection(dbConfig)
-        const [rows] = await conn.execute('DELETE from Felhasznalok where FelhasznaloId =?',[req.params.UserId])
+        const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+        let adminuser = rows[0]
+        if(adminuser.statusz == 0){
+            res.status(401).send({error:"Fiókja blokkolva van"})
+            return 
+        }
+        if(adminuser.JogosultsagId != 3){
+            res.status(404).send({error:"Nincs joga az adott művelet elvégzéshez!"})
+            return
+        }    
+        const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[req.params.UserId])
+        let olduser = rows2[0]
+        let user = olduser
+        if(!olduser) {
+            res.status(500).send({error:'A felhasználó nem létezik'})
+            return
+        } 
+
+        const [rows3] = await conn.execute('DELETE from Felhasznalok where FelhasznaloId =?',[req.params.UserId])
         user.Jelszo=undefined
-        if (rows.affectedRows > 0) {
+        if (rows3.affectedRows > 0) {
             res.status(201).send({success:"Sikeres törlés",data:user})
             return  
         }
@@ -241,32 +240,30 @@ export async function getUserByIdAdmin(req, res) {
             res.status(401).send({error: "Hiányzó felhasználó azonosító"})
             return
         }
-        const conn = await mysqlP.createConnection(dbConfig)
         if (!res.decodedToken.UserId) {
             res.status(401).send({error:"Hiányzó paraméter"})
             return
         }
-    
-        const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
-        let adminuser = rows2[0]
-        if(adminuser.statusz == 0){
-            res.status(401).send({error:"Fiókja blokkolva van"})
-            return 
-        }
-        if(adminuser.JogosultsagId != 3 && adminuser.JogosultsagId != 2){
-            res.status(404).send({error:"Nincs joga az adott művelet elvégzéshez!"})
-            return
-        }    
-    
-        const [rows] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = ?',[req.params.UserId])
-        let user = rows[0]
-        if(!user) {
-            res.status(500).send({error:'A felhasználó nem létezik'})
-            return
-        } 
-        res.status(200).send({success:"Sikeres lekérdezés",data:user})
-    
+        const conn = await mysqlP.createConnection(dbConfig)
         try {
+            const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+            let adminuser = rows[0]
+            if(adminuser.statusz == 0){
+                res.status(401).send({error:"Fiókja blokkolva van"})
+                return 
+            }
+            if(adminuser.JogosultsagId != 3 && adminuser.JogosultsagId != 2){
+                res.status(404).send({error:"Nincs joga az adott művelet elvégzéshez!"})
+                return
+            }    
+        
+            const [rows2] = await conn.execute('Select FelhasznaloNev,Email from Felhasznalok where FelhasznaloId = ?',[req.params.UserId])
+            let user = rows2[0]
+            if(!user) {
+                res.status(500).send({error:'A felhasználó nem létezik'})
+                return
+            } 
+            res.status(200).send({success:"Sikeres lekérdezés",data:user})
         }
         catch (err){
             switch (err.errno) {
@@ -281,32 +278,30 @@ export async function getUserByIdAdmin(req, res) {
 }
 
 export async function getUsersAdmin(req, res) {
-        const conn = await mysqlP.createConnection(dbConfig)
         if (!res.decodedToken.UserId) {
             res.status(401).send({error:"Hiányzó paraméter"})
             return
         }
-    
-        const [rows2] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
-        let adminuser = rows2[0]
-        if(adminuser.statusz == 0){
-            res.status(401).send({error:"Fiókja blokkolva van"})
-            return 
-        }
-        if(adminuser.JogosultsagId != 3 && adminuser.JogosultsagId != 2){
-            res.status(404).send({error:"Nincs joga az adott művelet elvégzéshez!"})
-            return
-        }    
-    
-        const [rows] = await conn.execute('Select FelhasznaloId,FelhasznaloNev,Email from Felhasznalok')
-        let users = rows
-        if(!users) {
-            res.status(500).send({error:'Sikertelen lekérdezés'})
-            return
-        } 
-        res.status(200).send({success:"Sikeres lekérdezés",data:users})
-    
+        const conn = await mysqlP.createConnection(dbConfig)
         try {
+            const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?',[res.decodedToken.UserId])
+            let adminuser = rows[0]
+            if(adminuser.statusz == 0){
+                res.status(401).send({error:"Fiókja blokkolva van"})
+                return 
+            }
+            if(adminuser.JogosultsagId != 3 && adminuser.JogosultsagId != 2){
+                res.status(404).send({error:"Nincs joga az adott művelet elvégzéshez!"})
+                return
+            }    
+        
+            const [rows2] = await conn.execute('Select FelhasznaloId,FelhasznaloNev,Email from Felhasznalok')
+            let users = rows2
+            if(!users) {
+                res.status(500).send({error:'Sikertelen lekérdezés'})
+                return
+            } 
+            res.status(200).send({success:"Sikeres lekérdezés",data:users})
         }
         catch (err){
             switch (err.errno) {
